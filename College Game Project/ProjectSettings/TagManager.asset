@@ -4,7 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - DeathBox
+  - Speed
+  - HP
   layers:
   - Default
   - TransparentFX
@@ -41,13 +42,4 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: Background
-    uniqueID: 2215091387
-    locked: 0
-  - name: Foreground
-    uniqueID: 2337216261
-    locked: 0
-  - name: UI
-    uniqueID: 3129025937
     locked: 0
