@@ -1,18 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CodeMonkey.Utils;
 
 public class MeleeAttack : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+    void GetAttackDirectionAndAttack(){
+        if(Input.GetMouseButtonDown(0)){
+            Vector3 mousePosition = UtilsClass.GetMouseWorldPosition();
+            Vector3 attackDir = (mousePosition - transform.position).normalized;
+            
+        }
     }
 }
