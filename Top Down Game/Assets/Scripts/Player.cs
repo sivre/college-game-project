@@ -82,7 +82,7 @@ public class Player : MonoBehaviour
             float angle = Mathf.Atan2(attackDir.y, attackDir.x) * Mathf.Rad2Deg;
             Quaternion rot = Quaternion.Euler(new Vector3(0f, 0f, angle));
 
-            Instantiate(slash, attackDir + transform.position - new Vector3(0f, transform.localScale.y/2.2f, 0f), rot);
+            Instantiate(slash, attackDir + transform.position + new Vector3(0f, transform.localScale.y/2.2f, 0f), rot);
         }
     }
 
