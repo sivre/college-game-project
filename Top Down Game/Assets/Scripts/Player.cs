@@ -7,8 +7,12 @@ using CodeMonkey;
 
 public class Player : MonoBehaviour
 {
-    public float playerSpeed;
+    public float defaultPlayerSpeed;
+    float playerSpeed;
+    float maxPlayerSpeed;
     public HealthSystem health;
+    public int ammo;
+    public int maxAmmo = 3;
     
     [SerializeField] Character_Base character;
 
@@ -16,6 +20,7 @@ public class Player : MonoBehaviour
     [SerializeField] Rigidbody2D rb;
     [SerializeField] Transform slash;
     [SerializeField] Transform knife;
+    [SerializeField] UI ui;
     
     Vector2 movement;
     float horizontal = 1f;
@@ -23,13 +28,17 @@ public class Player : MonoBehaviour
     private enum State{
         Normal,
         Attacking,
+        NoWeapon,
     }
 
     private State state;
 
     void Awake() {
         state = State.Normal;
-        health = new HealthSystem(1);
+        playerSpeed = defaultPlayerSpeed;
+        ammo = maxAmmo;
+        maxPlayerSpeed = playerSpeed * 1.5f;
+        health = new HealthSystem(5);
     }
 
     void Update() {
@@ -52,7 +61,24 @@ public class Player : MonoBehaviour
             state = State.Normal;
         }
             break;
+
+            case State.NoWeapon:
+            
+        if(ammo == 0){
+            if(playerSpeed > maxPlayerSpeed){
+                playerSpeed = maxPlayerSpeed;
         }
+        else{
+            playerSpeed += 0.5f * Time.deltaTime;
+        }
+        MovementInput();
+        }
+        else if(ammo > 0){
+            playerSpeed = defaultPlayerSpeed;
+            state = State.Normal;
+        }
+            break;
+     }
     }
 
     void FixedUpdate() {
@@ -79,11 +105,27 @@ public class Player : MonoBehaviour
             InstantiateAttack(GetMouseDirection(), "Player0 Attack", slash);
         }
         if(Input.GetMouseButtonDown(1)){
+            if(ammo > 0){
             Vector3 throwDir = GetMouseDirection();
             Transform knifeTransform = GetInstantiateAttack(throwDir, "Player0 Throw", knife);
 
             knifeTransform.GetComponent<Knife>().Setup(throwDir);
+            ammo -= 1;
+            CheckAmmo();
+            }
         }   
+    }
+
+    void CheckAmmo(){
+        if(ammo < 0){
+        ammo = 0;
+        }
+        else if(ammo > 3){
+            ammo = 3;
+        }
+        if(ammo == 0){
+            state = State.NoWeapon;
+        }
     }
 
 
