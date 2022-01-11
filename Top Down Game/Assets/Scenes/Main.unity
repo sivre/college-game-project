@@ -3849,6 +3849,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultPlayerSpeed: 5
   ammo: 3
+  maxAmmo: 3
   character: {fileID: 1417190745}
   animator: {fileID: 1417190739}
   rb: {fileID: 1417190743}
