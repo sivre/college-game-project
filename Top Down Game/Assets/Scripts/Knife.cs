@@ -8,6 +8,7 @@ public class Knife : MonoBehaviour
     [SerializeField] float moveSpeed = 10f;
 
     float rotSpeed = 300f;
+    int damage = 1;
 
     enum State{
         Flying,
@@ -38,7 +39,7 @@ public class Knife : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other) {
         if(other.GetComponent<Enemy>() != null){
-            
+            other.GetComponent<Enemy>().Damage(transform.GetComponentInParent<Player>(), damage);
         }
         else if(other.GetComponent<Knife>() != null){
         }

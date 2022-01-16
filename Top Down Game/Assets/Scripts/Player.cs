@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     public HealthSystem health;
     public int ammo;
     public int maxAmmo = 3;
+    bool isInvulnerable = false;
     
     [SerializeField] Character_Base character;
 
@@ -142,10 +143,11 @@ public class Player : MonoBehaviour
 
         //Calculates the direction where the attack will be instantiated
         float angle = Mathf.Atan2(attackDir.y, attackDir.x) * Mathf.Rad2Deg;
-        Quaternion rot = Quaternion.Euler(new Vector3(0f, 0f, angle));
+        Quaternion rot = Quaternion.Euler(new Vector3(0f, 0f, angle - 90f));
 
         //The new Vector is used so the particle doesn't Instantiate below the player
-        Instantiate(prefab, attackDir + transform.position + new Vector3(0f, transform.localScale.y/2.2f, 0f), rot);
+        var Prefab = Instantiate(prefab, attackDir + transform.position + new Vector3(0f, transform.localScale.y/2.2f, 0f), rot);
+        Prefab.transform.parent = gameObject.transform;
     }
 
     Transform GetInstantiateAttack(Vector3 attackDir, string animName, Transform prefab){
@@ -171,5 +173,25 @@ public class Player : MonoBehaviour
         Vector3 mousePosition = UtilsClass.GetMouseWorldPosition();
         Vector3 mouseDir = (mousePosition - transform.position).normalized;
         return mouseDir;
+    }
+
+    public void Damage(Enemy attacker, int damage){
+        Vector3 attackerPos = transform.position;
+        if(attacker != null){
+            attackerPos = attacker.transform.position;
+        }
+        if(!isInvulnerable){
+            health.Damage(damage);
+            StartCoroutine(character.Invulnerable());
+        }
+
+        //sound
+        //blood
+    }
+
+    IEnumerator Invulnerable(){
+        isInvulnerable = true;
+        yield return new WaitForSeconds(1f);
+        isInvulnerable = false;
     }
 }
