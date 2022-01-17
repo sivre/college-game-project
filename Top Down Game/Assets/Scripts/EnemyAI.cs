@@ -9,7 +9,7 @@ public class EnemyAI : MonoBehaviour
     float minDistance = 2f;
     float maxDistance = 6f;
 
-    [SerializeField]
+    GameObject playerGameObject;
     Transform player;
     Enemy enemy;
     float speed;
@@ -35,11 +35,12 @@ public class EnemyAI : MonoBehaviour
         seeker = GetComponent<Seeker>();
         rb = GetComponent<Rigidbody2D>();
         character_Base = GetComponent<Character_Base>();
+        playerGameObject = GameObject.Find("Player");
+        player = playerGameObject.transform;
     }
 
     void Start()
     {
-        speed = enemy.speed;
         startingPosition = transform.position;
         state = State.Roaming;
         InvokeRepeating("UpdatePath", 0f, .5f);
@@ -47,6 +48,7 @@ public class EnemyAI : MonoBehaviour
     }
 
     void Update(){
+        speed = enemy.speed;
         switch(state){
             case State.Roaming:
                 target = GetRoamingPos();
@@ -58,7 +60,7 @@ public class EnemyAI : MonoBehaviour
 
                 float attackRange = 1f;
                 if(Vector3.Distance(transform.position, player.position) < attackRange){
-                    StartCoroutine(enemy.Attack((player.position).normalized));
+                    enemy.Attack((player.position - transform.position).normalized);
                 }
                 break;
         }
@@ -86,7 +88,9 @@ public class EnemyAI : MonoBehaviour
         Vector2 movement = dir * speed;
 
         rb.velocity = movement;
-        character_Base.CheckIfFlipCharacter(movement.x < 0);
+        if(movement.x != 0){
+            character_Base.CheckIfFlipCharacter(movement.x < 0);
+        }
 
         float dist = Vector2.Distance(rb.position, currentPath.vectorPath[currentWaypoint]);
 

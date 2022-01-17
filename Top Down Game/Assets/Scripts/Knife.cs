@@ -39,7 +39,7 @@ public class Knife : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other) {
         if(other.GetComponent<Enemy>() != null){
-            other.GetComponent<Enemy>().Damage(transform.GetComponentInParent<Player>(), damage);
+            other.GetComponent<Enemy>().Damage(damage);
         }
         else if(other.GetComponent<Knife>() != null){
         }

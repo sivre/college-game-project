@@ -21,12 +21,12 @@ public class Character_Base : MonoBehaviour
         }
     }
 
-    public void InstantiateAttack(Vector3 attackDir, Transform prefab){
+    public void InstantiateAttack(Vector3 attackDir, Transform prefab, float rotOffset, float posOffset){
         //Calculates the direction where the attack will be instantiated
         float angle = Mathf.Atan2(attackDir.y, attackDir.x) * Mathf.Rad2Deg;
-        Quaternion rot = Quaternion.Euler(new Vector3(0f, 0f, angle));
+        Quaternion rot = Quaternion.Euler(new Vector3(0f, 0f, angle + rotOffset));
 
         //The new Vector is used so the particle doesn't Instantiate below the player
-        Instantiate(prefab, attackDir + transform.position + new Vector3(0f, transform.localScale.y/2.2f, 0f), rot);
+        Instantiate(prefab, attackDir + transform.position + new Vector3(0f, transform.localScale.y/2.2f + posOffset, 0f), rot);
     }
 }

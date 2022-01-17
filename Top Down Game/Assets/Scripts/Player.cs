@@ -22,6 +22,7 @@ public class Player : MonoBehaviour
     [SerializeField] Transform slash;
     [SerializeField] Transform knife;
     [SerializeField] UI ui;
+    [SerializeField] MaterialTintColor materialTintColor;
     
     Vector2 movement;
     float horizontal = 1f;
@@ -35,6 +36,7 @@ public class Player : MonoBehaviour
     private State state;
 
     void Awake() {
+        materialTintColor = GetComponent<MaterialTintColor>();
         state = State.Normal;
         playerSpeed = defaultPlayerSpeed;
         ammo = maxAmmo;
@@ -175,14 +177,12 @@ public class Player : MonoBehaviour
         return mouseDir;
     }
 
-    public void Damage(Enemy attacker, int damage){
+    public void Damage(int damage){
         Vector3 attackerPos = transform.position;
-        if(attacker != null){
-            attackerPos = attacker.transform.position;
-        }
         if(!isInvulnerable){
             health.Damage(damage);
             StartCoroutine(character.Invulnerable());
+            materialTintColor.SetTintColor(new Color(1, 0, 0, 1f));
         }
 
         //sound
@@ -193,5 +193,13 @@ public class Player : MonoBehaviour
         isInvulnerable = true;
         yield return new WaitForSeconds(1f);
         isInvulnerable = false;
+    }
+
+    void OnTriggerEnter2D(Collider2D other) {
+        if(other.GetComponent<PickupHealth>() != null){
+            materialTintColor.SetTintColor(new Color(0, 1, 0, 1f));
+            health.Heal(5);
+            Destroy(other.gameObject);
+        }
     }
 }

@@ -5,16 +5,16 @@ using UnityEngine;
 public class Attack : MonoBehaviour
 {
     FunctionTimer functionTimer;
+    [SerializeField] bool canAttackEnemy;
+    [SerializeField] bool canAttackPlayer;
     [SerializeField]
     int damage = 1;
     private void OnTriggerEnter2D(Collider2D other) {
-        Debug.Log("Works.");
-        if(other.GetComponent<Player>() != null){
-            other.GetComponent<Player>().Damage(transform.GetComponentInParent<Enemy>(), damage);
+        if(other.GetComponent<Player>() != null && canAttackPlayer){
+            other.GetComponent<Player>().Damage(damage);
         }
-        if(other.GetComponent<Enemy>() != null){
-            other.GetComponent<Enemy>().Damage(transform.GetComponentInParent<Player>(), damage);
-            Debug.Log("Enemy hit.");
+        if(other.GetComponent<Enemy>() != null && canAttackEnemy){
+            other.GetComponent<Enemy>().Damage(damage);
         }
     }
 }
